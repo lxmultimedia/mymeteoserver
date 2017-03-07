@@ -1,0 +1,4 @@
+Zurich,ch
+Milano,it
+Paris,fr
+London,uk
