@@ -17,7 +17,7 @@ public class CityLoader {
 	private List<String> cityList; 
 	
 	public CityLoader() throws IOException {
-		currentDirectory = this.getClass().getClassLoader().getResource("").getPath();
+		currentDirectory = System.getProperty("user.dir")+"/bin/";
 		cityList = new ArrayList<String>();
 	}
 	
