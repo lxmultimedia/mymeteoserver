@@ -1,8 +1,10 @@
 package esa.ffhs.ch;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.bind.JAXBException;
 
@@ -35,7 +37,6 @@ public class YahooWeatherData implements Runnable {
 				try {
 					service = new YahooWeatherService();
 				} catch (JAXBException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				LimitDeclaration result = service.getForecastForLocation(c, DegreeUnit.CELSIUS);
@@ -44,17 +45,24 @@ public class YahooWeatherData implements Runnable {
 					DBConnection.instance.writeJSONObject(json);
 					JSONResult.add(json);
 				} catch (JAXBException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				// Sleep for 1 Minute before next query
+				try {
+					TimeUnit.MINUTES.sleep(1);
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			System.out.println(gson.toJson(getJSONResult()));
-			
+
 			JSONResult.clear();
 		}
 	}

@@ -4,21 +4,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
-
 import javax.xml.bind.JAXBException;
 
-import com.mysql.jdbc.Connection;
 
 public class ServerMain {
 
 	private static DBConnection dbconnection = null;
 	static Timestamp DateCheck = new Timestamp(System.currentTimeMillis());
-	
-	public static void main(String[] args) throws FileNotFoundException, IOException, JAXBException, URISyntaxException {
+
+	public static void main(String[] args)
+			throws FileNotFoundException, IOException, JAXBException, URISyntaxException {
 
 		dbconnection = new DBConnection();
 		dbconnection.createConnection();
-		
+
 		esa.ffhs.ch.CityLoader loader = new esa.ffhs.ch.CityLoader();
 		YahooWeatherData WeatherData = new YahooWeatherData(loader.loadAll());
 

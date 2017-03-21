@@ -2,7 +2,6 @@ package esa.ffhs.ch;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -12,6 +11,8 @@ public class DBConnection {
 	public static DBConnection instance = new DBConnection();
 	private static Connection dbconnection = null;
 	public static final String URL = "jdbc:mysql://localhost:3306/mymeteo";
+	//debug
+	//public static final String URL = "jdbc:mysql://1163.vps.hostfactory.ch:3306/mymeteo";
 	public static final String USER = "root";
 	public static final String PASSWORD = "***REMOVED***";
 	public static final String DRIVER_CLASS = "com.mysql.jdbc.Driver";
@@ -47,7 +48,13 @@ public class DBConnection {
 		return dbconnection;
 	}
 
-	public void writeJSONObject(String json) {
+	public void writeJSONObject(String json) throws SQLException {
+
+		Connection connection = null;
+		Statement statement = null;
+
+		connection = DBConnection.getConnection();
+		statement = connection.createStatement();
 
 		Timestamp timeStampNow = new Timestamp(System.currentTimeMillis());
 
@@ -59,36 +66,32 @@ public class DBConnection {
 
 		int diffHours = (int) ((diff / (1000 * 60 * 60)) % 24);
 
-
 		if (diffHours > 24) {
-			
+
 			ServerMain.DateCheck = timeStampNow;
-			
-			ResultSet rs = null;
-			Connection connection = null;
-			Statement statement = null;
 
 			String queryEmptyTable = "DELETE FROM yahoodata";
 			try {
-				connection = DBConnection.getConnection();
-				statement = connection.createStatement();
+
 				int numRowsChanged = statement.executeUpdate(queryEmptyTable);
-				System.out.println("Delete From 'yahoodata' executed.");
+				System.out.println("Delete From 'yahoodata' executed : " + numRowsChanged + " rows");
+				System.out.println();
+				System.out.println();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 
-			
-			String query = "INSERT INTO yahoodata (jsonobject,jo_datetime) VALUES ('" + json + "',CURRENT_TIMESTAMP())";
-			try {
-				connection = DBConnection.getConnection();
-				statement = connection.createStatement();
-				int numRowsChanged = statement.executeUpdate(query);
-				System.out.println("City Data written to DB.");
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
 		}
+
+		String query = "INSERT INTO yahoodata (jsonobject,jo_datetime) VALUES ('" + json + "',CURRENT_TIMESTAMP())";
+		try {
+			int numRowsChanged = statement.executeUpdate(query);
+			System.out.println("City Data written to DB : " + numRowsChanged + " rows");
+			System.out.println();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
 	}
 
 }

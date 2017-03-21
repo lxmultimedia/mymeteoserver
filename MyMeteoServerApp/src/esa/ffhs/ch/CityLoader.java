@@ -20,10 +20,10 @@ public class CityLoader {
 
 	public CityLoader() throws IOException, URISyntaxException {
 		// debug
-		//currentDirectory = System.getProperty("user.dir") + "/bin/";
+		// currentDirectory = System.getProperty("user.dir") + "/bin/";
 		// deploy
 		File filePath = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-		currentDirectory = filePath.getParentFile().toString()+"/";
+		currentDirectory = filePath.getParentFile().toString() + "/";
 		cityList = new ArrayList<String>();
 	}
 
