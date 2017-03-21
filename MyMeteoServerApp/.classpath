@@ -12,6 +12,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/yahoo-weather-java-api"/>
-	<classpathentry kind="lib" path="/Users/lxm/Downloads/gson-2.8.0.jar"/>
+	<classpathentry kind="lib" path="/Users/lxm/git/mymeteoserver/MyMeteoServerApp/bin/esa/ffhs/ch/gson-2.8.0.jar" sourcepath="/Users/lxm/.m2/repository/com/google/code/gson/gson/2.8.0/gson-2.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/lxm/git/mymeteoserver/MyMeteoServerApp/bin/esa/ffhs/ch/mysql-connector-java-5.1.41-bin.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
