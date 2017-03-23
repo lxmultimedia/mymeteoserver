@@ -62,11 +62,13 @@ public class DBConnection {
 
 		Timestamp b = timeStampNow;
 
-		long diff = b.getTime() - a.getTime();
+		long diff = a.getTime() - b.getTime();
 
-		int diffHours = (int) ((diff / (1000 * 60 * 60)) % 24);
+		int diffHours = -(int) ((diff / (1000 * 60 * 60)) % 24);
 
-		if (diffHours > 24) {
+		System.out.println(diffHours);
+		
+		if (diffHours > 23) {
 
 			ServerMain.DateCheck = timeStampNow;
 
