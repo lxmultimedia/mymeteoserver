@@ -35,7 +35,7 @@ public class DBConnection {
 
 		try {
 			connection = DriverManager.getConnection(URL, USER, PASSWORD);
-			System.out.println("Connected.");
+			System.out.println("Connected to DB : " + URL);
 			System.out.println("");
 		} catch (SQLException e) {
 			System.out.println("ERROR: Unable to Connect to Database.");
@@ -47,9 +47,8 @@ public class DBConnection {
 	public static Connection getConnection() {
 		return dbconnection;
 	}
-
-	public void writeJSONObject(String json) throws SQLException {
-
+	
+	public void DeleteOldRows() throws SQLException {
 		Connection connection = null;
 		Statement statement = null;
 
@@ -66,24 +65,34 @@ public class DBConnection {
 
 		int diffHours = -(int) ((diff / (1000 * 60 * 60)) % 24);
 
-		System.out.println(diffHours);
+		System.out.println("Diff hours: " + diffHours);
 		
-		if (diffHours > 23) {
-
+		if (diffHours > 23) 
+		{
 			ServerMain.DateCheck = timeStampNow;
-
+					
 			String queryEmptyTable = "DELETE FROM yahoodata";
 			try {
 
 				int numRowsChanged = statement.executeUpdate(queryEmptyTable);
+				System.out.println("-----------------");
 				System.out.println("Delete From 'yahoodata' executed : " + numRowsChanged + " rows");
-				System.out.println();
+				System.out.println("-----------------");
 				System.out.println();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-
 		}
+	}
+
+	public void writeJSONObject(String json) throws SQLException {
+
+		Connection connection = null;
+		Statement statement = null;
+
+		connection = DBConnection.getConnection();
+		statement = connection.createStatement();
+
 
 		String query = "INSERT INTO yahoodata (jsonobject,jo_datetime) VALUES ('" + json + "',CURRENT_TIMESTAMP())";
 		try {

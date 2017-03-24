@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.xml.bind.JAXBException;
 
@@ -29,8 +28,23 @@ public class YahooWeatherData implements Runnable {
 
 		while (true) {
 
+			try {
+				DBConnection.instance.DeleteOldRows();
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+			
+			
 			String json = "";
 			for (String c : cityList) {
+				
+				// Sleep
+				try {
+					Thread.sleep(60000);;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}	
+				
 				System.out.println(c);
 				System.out.println("--------------------------------------");
 				YahooWeatherService service = null;
@@ -51,13 +65,6 @@ public class YahooWeatherData implements Runnable {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-
-				// Sleep for 1 Minute before next query
-				try {
-					TimeUnit.MINUTES.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 			}
 
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -66,6 +73,7 @@ public class YahooWeatherData implements Runnable {
 			JSONResult.clear();
 		}
 	}
+
 
 	public ArrayList<String> getJSONResult() {
 		return JSONResult;
