@@ -63,7 +63,7 @@ public class DBConnection {
 		
 		long diff = timeNow.getTime() - baseTime.getTime();
 
-		long diffHours = TimeUnit.MILLISECONDS.toSeconds(diff); 
+		long diffHours = TimeUnit.MILLISECONDS.toHours(diff); 
 		
 		System.out.println("");
 		System.out.println("Diff hours: " + diffHours);
