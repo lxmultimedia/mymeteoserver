@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.concurrent.TimeUnit;
 
 public class DBConnection {
 
@@ -55,21 +56,21 @@ public class DBConnection {
 		connection = DBConnection.getConnection();
 		statement = connection.createStatement();
 
-		Timestamp timeStampNow = new Timestamp(System.currentTimeMillis());
+		Timestamp timeNow = new Timestamp(System.currentTimeMillis());
 
-		Timestamp a = ServerMain.DateCheck;
+		Timestamp baseTime = ServerMain.DateCheck;
 
-		Timestamp b = timeStampNow;
+		
+		long diff = timeNow.getTime() - baseTime.getTime();
 
-		long diff = a.getTime() - b.getTime();
-
-		int diffHours = -(int) ((diff / (1000 * 60 * 60)) % 24);
-
+		long diffHours = TimeUnit.MILLISECONDS.toSeconds(diff); 
+		
+		System.out.println("");
 		System.out.println("Diff hours: " + diffHours);
+		System.out.println("");
 		
 		if (diffHours > 23) 
 		{
-			ServerMain.DateCheck = timeStampNow;
 					
 			String queryEmptyTable = "DELETE FROM yahoodata";
 			try {
@@ -82,6 +83,8 @@ public class DBConnection {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+			
+			ServerMain.DateCheck = timeNow;
 		}
 	}
 

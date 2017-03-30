@@ -38,7 +38,7 @@ public class YahooWeatherData implements Runnable {
 			String json = "";
 			for (String c : cityList) {
 				
-				// Sleep
+				// Sleep 1 min
 				try {
 					Thread.sleep(60000);;
 				} catch (InterruptedException e) {
