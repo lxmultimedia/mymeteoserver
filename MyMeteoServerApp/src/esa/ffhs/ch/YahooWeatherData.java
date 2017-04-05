@@ -38,6 +38,9 @@ public class YahooWeatherData implements Runnable {
 			String json = "";
 			for (String c : cityList) {
 				
+				String location = c.substring(0,c.indexOf(","));
+				String locationCode = c.substring(c.indexOf(",")+1);
+							
 				// Sleep 1 min
 				try {
 					Thread.sleep(60000);;
@@ -56,7 +59,7 @@ public class YahooWeatherData implements Runnable {
 				LimitDeclaration result = service.getForecastForLocation(c, DegreeUnit.CELSIUS);
 				try {
 					json = new Gson().toJson(result.all());
-					DBConnection.instance.writeJSONObject(json);
+					DBConnection.instance.writeJSONObject(json,location,locationCode);
 					JSONResult.add(json);
 				} catch (JAXBException e) {
 					e.printStackTrace();

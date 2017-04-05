@@ -85,10 +85,14 @@ public class DBConnection {
 			}
 			
 			ServerMain.DateCheck = timeNow;
+			
+			// Reset PK auto_increment
+			String queryResetPK = "ALTER TABLE yahoodata AUTO_INCREMENT = 1;";
+			statement.executeUpdate(queryResetPK);
 		}
 	}
 
-	public void writeJSONObject(String json) throws SQLException {
+	public void writeJSONObject(String json, String location, String locationCode) throws SQLException {
 
 		Connection connection = null;
 		Statement statement = null;
@@ -97,7 +101,8 @@ public class DBConnection {
 		statement = connection.createStatement();
 
 
-		String query = "INSERT INTO yahoodata (jsonobject,jo_datetime) VALUES ('" + json + "',CURRENT_TIMESTAMP())";
+		String query = "INSERT INTO yahoodata (jo_jsonobject,jo_datetime,jo_location,jo_location_code) "
+				+ "VALUES ('" + json + "',CURRENT_TIMESTAMP(),'" + location + "','" + locationCode + "')";
 		try {
 			int numRowsChanged = statement.executeUpdate(query);
 			System.out.println("City Data written to DB : " + numRowsChanged + " rows");
