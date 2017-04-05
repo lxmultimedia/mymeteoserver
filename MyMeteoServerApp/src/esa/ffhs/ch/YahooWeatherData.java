@@ -41,7 +41,7 @@ public class YahooWeatherData implements Runnable {
 				String location = c.substring(0,c.indexOf(","));
 				String locationCode = c.substring(c.indexOf(",")+1);
 							
-				// Sleep 1 min
+				// Sleepfor  1min
 				try {
 					Thread.sleep(60000);;
 				} catch (InterruptedException e) {

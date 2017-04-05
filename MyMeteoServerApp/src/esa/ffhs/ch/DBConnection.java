@@ -110,7 +110,5 @@ public class DBConnection {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
-
 }
