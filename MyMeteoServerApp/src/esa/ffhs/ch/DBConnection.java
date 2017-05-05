@@ -15,7 +15,7 @@ public class DBConnection {
 	//debug
 	//public static final String URL = "jdbc:mysql://1163.vps.hostfactory.ch:3306/mymeteo";
 	public static final String USER = "root";
-	public static final String PASSWORD = "***REMOVED***";
+	public static final String PASSWORD = "";
 	public static final String DRIVER_CLASS = "com.mysql.jdbc.Driver";
 
 	DBConnection() {
