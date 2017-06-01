@@ -48,7 +48,7 @@ public class DBConnection {
 	public static Connection getConnection() {
 		return dbconnection;
 	}
-	
+
 	public void DeleteOldRows() throws SQLException {
 		Connection connection = null;
 		Statement statement = null;
@@ -60,18 +60,18 @@ public class DBConnection {
 
 		Timestamp baseTime = ServerMain.DateCheck;
 
-		
+
 		long diff = timeNow.getTime() - baseTime.getTime();
 
 		long diffHours = TimeUnit.MILLISECONDS.toHours(diff); 
-		
+
 		System.out.println("");
 		System.out.println("Diff hours: " + diffHours);
 		System.out.println("");
-		
+
 		if (diffHours > 23) 
 		{
-					
+
 			String queryEmptyTable = "DELETE FROM yahoodata";
 			try {
 
@@ -83,9 +83,9 @@ public class DBConnection {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			
+
 			ServerMain.DateCheck = timeNow;
-			
+
 			// Reset PK auto_increment
 			String queryResetPK = "ALTER TABLE yahoodata AUTO_INCREMENT = 1;";
 			statement.executeUpdate(queryResetPK);

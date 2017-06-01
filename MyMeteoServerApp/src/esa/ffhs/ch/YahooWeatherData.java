@@ -24,7 +24,7 @@ public class YahooWeatherData implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 
 		while (true) {
 
@@ -33,21 +33,21 @@ public class YahooWeatherData implements Runnable {
 			} catch (SQLException e2) {
 				e2.printStackTrace();
 			}
-			
-			
+
+
 			String json = "";
 			for (String c : cityList) {
-				
+
 				String location = c.substring(0,c.indexOf(","));
 				String locationCode = c.substring(c.indexOf(",")+1);
-							
+
 				// Sleepfor  1min
 				try {
-					Thread.sleep(60000);;
+					Thread.sleep(60000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}	
-				
+
 				System.out.println(c);
 				System.out.println("--------------------------------------");
 				YahooWeatherService service = null;
@@ -59,7 +59,15 @@ public class YahooWeatherData implements Runnable {
 				LimitDeclaration result = service.getForecastForLocation(c, DegreeUnit.CELSIUS);
 				try {
 					json = new Gson().toJson(result.all());
-					DBConnection.instance.writeJSONObject(json,location,locationCode);
+					StringBuilder jsonstr = new StringBuilder(json);
+					//System.out.println(jsonstr);
+					json = jsonstr.delete(jsonstr.indexOf("![CDATA[")-6, jsonstr.indexOf("]]")+8).toString();
+
+					if(json.indexOf("![CDATA[")>0) {
+						jsonstr = new StringBuilder(json);
+						json = jsonstr.delete(jsonstr.indexOf("![CDATA[")-6, jsonstr.indexOf("]]")+8).toString();
+					}
+					DBConnection.instance.writeJSONObject(jsonstr.toString(),location,locationCode);
 					JSONResult.add(json);
 				} catch (JAXBException e) {
 					e.printStackTrace();
@@ -67,11 +75,10 @@ public class YahooWeatherData implements Runnable {
 					e.printStackTrace();
 				} catch (SQLException e) {
 					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			System.out.println(gson.toJson(getJSONResult()));
 
 			JSONResult.clear();
 		}
